@@ -1,8 +1,13 @@
-import Batteries
-import UnicodeBasic
+/-
+Copyright © 2025 François G. Dorais. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+module
 
-theorem List.mem_finRange (x : Fin n) : x ∈ finRange n := by
-  simp [finRange]
+public import UnicodeBasic
+meta import UnicodeBasic
+
+public section
 
 namespace Char
 
@@ -21,17 +26,20 @@ private theorem of_all_aux (h : Char.all p) (n : Nat) (hn : n.isValidChar) :
   simp [Nat.isValidChar] at hn
   match hn with
   | .inl hn =>
-    have hn' : n < 1114112 := by omega
-    have := h ⟨n, hn'⟩ (List.mem_finRange _)
-    rwa [dif_pos hn] at this
+    have hn' : n < 1114112 := by lia
+    have := h ⟨n, hn'⟩
+    simp only [hn, dite_true] at this
+    exact this
   | .inr ⟨hn, hn'⟩ =>
-    have hn'' : ¬ n < 55296 := by omega
-    have := h ⟨n, hn'⟩ (List.mem_finRange _)
-    rwa [dif_neg hn'', dif_pos hn] at this
+    have hn'' : ¬ n < 55296 := by lia
+    have := h ⟨n, hn'⟩
+    simp only [hn'', hn, dite_false, dite_true] at this
+    exact this
 
 theorem of_all (h : Char.all p) (c : Char) : p c := by
   have : c.toNat.isValidChar := c.valid
-  rw [← c.ofNat_toNat, ofNat, dif_pos this]
+  rw [← c.ofNat_toNat]
+  simp only [ofNat, this, dite_true]
   exact of_all_aux h c.toNat this
 
 end Char

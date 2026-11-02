@@ -1,13 +1,10 @@
 name = "UnicodeLemmas"
+description = "Proofs about Unicode properties for Lean 4"
+keywords = ["unicode"]
 defaultTargets = ["UnicodeLemmas"]
 
 [[lean_lib]]
 name = "UnicodeLemmas"
-
-[[require]]
-name = "batteries"
-git = "https://github.com/leanprover-community/batteries"
-rev = "main"
 
 [[require]]
 name = "UnicodeBasic"
