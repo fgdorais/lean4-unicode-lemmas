@@ -5,10 +5,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import UnicodeBasic
-public import UnicodeLemmas.Char
+public import Batteries.Data.Char.Basic
 public import UnicodeLemmas.GeneralCategory
 meta import UnicodeBasic
-meta import UnicodeLemmas.Char
+meta import Batteries.Data.Char.Basic
 
 public section
 
