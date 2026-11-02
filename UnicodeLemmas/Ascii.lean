@@ -11,7 +11,7 @@ meta import UnicodeLemmas.Char
 
 public section
 
-namespace Unicode
+namespace Unicode.Ascii
 open GeneralCategory
 
 /-! Lean core's `Char` functions only handle ASCII; on ASCII they agree with UnicodeBasic. -/
@@ -54,4 +54,4 @@ theorem isDigit_of_isDigit {c : Char} (h : c.isDigit) : isDigit c := by
 theorem isWhiteSpace_of_isWhitespace {c : Char} : c.isWhitespace → isWhiteSpace c := by
   revert c; native_decide
 
-end Unicode
+end Unicode.Ascii

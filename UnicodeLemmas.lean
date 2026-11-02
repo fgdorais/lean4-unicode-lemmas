@@ -9,4 +9,4 @@ public import UnicodeLemmas.GeneralCategory
 public import UnicodeLemmas.Case
 public import UnicodeLemmas.Numeric
 public import UnicodeLemmas.Properties
-public import UnicodeLemmas.Core
+public import UnicodeLemmas.Ascii
