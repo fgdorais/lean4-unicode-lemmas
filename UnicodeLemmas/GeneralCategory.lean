@@ -32,6 +32,19 @@ theorem mem_of_subset_of_mem {c : Char} {x y : GC} (h : x ⊆ y) : c ∈ x → c
 
 end GC
 
+/-- The general category of a code point is exactly one of the 30 basic categories. -/
+theorem lookupGC_mem {c : UInt32} (h : c ≤ Unicode.max) : lookupGC c ∈ [GC.Lu, GC.Ll, GC.Lt,
+    GC.Lm, GC.Lo, GC.Mn, GC.Mc, GC.Me, GC.Nd, GC.Nl, GC.No, GC.Pc, GC.Pd, GC.Ps, GC.Pe, GC.Pi,
+    GC.Pf, GC.Po, GC.Sm, GC.Sc, GC.Sk, GC.So, GC.Zs, GC.Zl, GC.Zp, GC.Cc, GC.Cf, GC.Cs, GC.Co,
+    GC.Cn] := by
+  have : ∀ n : Fin 0x110000, lookupGC n.val.toUInt32 ∈ [GC.Lu, GC.Ll, GC.Lt, GC.Lm, GC.Lo,
+      GC.Mn, GC.Mc, GC.Me, GC.Nd, GC.Nl, GC.No, GC.Pc, GC.Pd, GC.Ps, GC.Pe, GC.Pi, GC.Pf, GC.Po,
+      GC.Sm, GC.Sc, GC.Sk, GC.So, GC.Zs, GC.Zl, GC.Zp, GC.Cc, GC.Cf, GC.Cs, GC.Co, GC.Cn] := by
+    native_decide
+  have hc : c.toNat < 0x110000 := by
+    simp only [Unicode.max, UInt32.le_iff_toNat_le] at h; grind
+  simpa using this ⟨c.toNat, hc⟩
+
 /-- The general category of a character is exactly one of the 30 basic categories. -/
 theorem getGC_mem (c : Char) : getGC c ∈ [GC.Lu, GC.Ll, GC.Lt, GC.Lm, GC.Lo, GC.Mn, GC.Mc, GC.Me,
     GC.Nd, GC.Nl, GC.No, GC.Pc, GC.Pd, GC.Ps, GC.Pe, GC.Pi, GC.Pf, GC.Po, GC.Sm, GC.Sc, GC.Sk,
