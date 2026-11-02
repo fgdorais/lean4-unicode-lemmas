@@ -13,25 +13,6 @@ public section
 
 namespace Unicode
 
-namespace GC
-
-@[simp] theorem subset_refl (x : GC) : x ⊆ x :=
-  beq_iff_eq.2 (UInt32.and_self (a := x))
-
-private theorem and_eq_of_and_eq {x y z : UInt32} (h₁ : x &&& y = x) (h₂ : y &&& z = y) :
-    x &&& z = x := by
-  rw [← h₁, UInt32.and_assoc, h₂]
-
-theorem subset_trans {x y z : GC} (h₁ : x ⊆ y) (h₂ : y ⊆ z) : x ⊆ z := by
-  have h₁ : x &&& y = x := beq_iff_eq.1 h₁
-  have h₂ : y &&& z = y := beq_iff_eq.1 h₂
-  exact beq_iff_eq.2 (and_eq_of_and_eq h₁ h₂)
-
-theorem mem_of_subset_of_mem {c : Char} {x y : GC} (h : x ⊆ y) : c ∈ x → c ∈ y :=
-  fun hc => subset_trans hc h
-
-end GC
-
 /-- The general category of a code point is exactly one of the 30 basic categories. -/
 theorem lookupGC_mem {c : UInt32} (h : c ≤ Unicode.max) : lookupGC c ∈ [GC.Lu, GC.Ll, GC.Lt,
     GC.Lm, GC.Lo, GC.Mn, GC.Mc, GC.Me, GC.Nd, GC.Nl, GC.No, GC.Pc, GC.Pd, GC.Ps, GC.Pe, GC.Pi,
