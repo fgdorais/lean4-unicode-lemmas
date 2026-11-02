@@ -1,4 +1,8 @@
-# UnicodeLemmas
+# Lean 4 / Unicode Lemmas
+
+Proofs about the character properties of
+[UnicodeBasic](https://github.com/fgdorais/lean4-unicode-basic), such as the fact that every cased
+character is alphabetic.
 
 ## The Lean4 / Unicode family
 
@@ -12,3 +16,29 @@ you only depend on what you need.
 | [UnicodeFormat](https://github.com/fgdorais/lean4-unicode-format) | Encoding and decoding: UTF-8, UTF-16 and UTF-32, the byte-level encoding schemes with byte order marks, strict and lossy decoding, and streaming iterators. |
 | **UnicodeLemmas** (this library) | Proofs about UnicodeBasic properties, such as the fact that every cased character is alphabetic. |
 | [UnicodeExtra](https://github.com/fgdorais/lean4-unicode-extra) | Unicode algorithms on whole strings that are too large or too specialized for UnicodeBasic, built on top of it. |
+
+## Installation
+
+Add the following dependency to your project's `lakefile.toml`:
+
+```toml
+[[require]]
+name = "UnicodeLemmas"
+git = "https://github.com/fgdorais/lean4-unicode-lemmas.git"
+rev = "main" # or any specific revision
+```
+
+Or this dependency to your project's `lakefile.lean`:
+
+```lean4
+require UnicodeLemmas from git
+  "https://github.com/fgdorais/lean4-unicode-lemmas.git" @ "main"
+```
+
+## Documentation
+
+You can generate documentation locally using `lake build UnicodeLemmas:docs` in the `docs` directory.
+
+-----
+
+* The `Lean 4 / Unicode Lemmas` library is copyright © 2025 François G. Dorais. The library is released under the [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0). See the file LICENSE for additional details.
