@@ -21,14 +21,14 @@ theorem isDecimal_eq_isDecimalNumber (c : Char) : isDecimal c = isDecimalNumber 
 theorem isDigit_of_isDecimal {c : Char} : isDecimal c → isDigit c := by
   revert c; native_decide
 
-theorem isNumeric_of_isDigit {c : Char} : isDigit c → isNumeric c := by
-  revert c; native_decide
-
 theorem isNumber_of_isDigit {c : Char} : isDigit c → isNumber c := by
   revert c; native_decide
 
 theorem isNumeric_of_isNumber {c : Char} : isNumber c → isNumeric c := by
   revert c; native_decide
+
+theorem isNumeric_of_isDigit {c : Char} (h : isDigit c) : isNumeric c :=
+  isNumeric_of_isNumber (isNumber_of_isDigit h)
 
 @[simp] theorem isSome_getDigit? (c : Char) : (getDigit? c).isSome = isDigit c := by
   revert c; native_decide

@@ -34,17 +34,21 @@ theorem getLowerChar_eq_toLower {c : Char} (h : c.val < 0x80) : getLowerChar c =
 theorem getUpperChar_eq_toUpper {c : Char} (h : c.val < 0x80) : getUpperChar c = c.toUpper := by
   revert c; native_decide
 
-theorem isUppercase_of_isUpper {c : Char} : c.isUpper → isUppercase c := by
-  revert c; native_decide
+theorem isUppercase_of_isUpper {c : Char} (h : c.isUpper) : isUppercase c := by
+  have hc : c.val < 0x80 := by simp [Char.isUpper] at h; grind
+  rwa [isUppercase_eq_isUpper hc]
 
-theorem isLowercase_of_isLower {c : Char} : c.isLower → isLowercase c := by
-  revert c; native_decide
+theorem isLowercase_of_isLower {c : Char} (h : c.isLower) : isLowercase c := by
+  have hc : c.val < 0x80 := by simp [Char.isLower] at h; grind
+  rwa [isLowercase_eq_isLower hc]
 
-theorem isAlphabetic_of_isAlpha {c : Char} : c.isAlpha → isAlphabetic c := by
-  revert c; native_decide
+theorem isAlphabetic_of_isAlpha {c : Char} (h : c.isAlpha) : isAlphabetic c := by
+  have hc : c.val < 0x80 := by simp [Char.isAlpha, Char.isUpper, Char.isLower] at h; grind
+  rwa [isAlphabetic_eq_isAlpha hc]
 
-theorem isDigit_of_isDigit {c : Char} : c.isDigit → isDigit c := by
-  revert c; native_decide
+theorem isDigit_of_isDigit {c : Char} (h : c.isDigit) : isDigit c := by
+  have hc : c.val < 0x80 := by simp [Char.isDigit] at h; grind
+  rwa [isDigit_eq_isDigit hc]
 
 /-- Unicode white space also includes U+000B and U+000C, which core's `Char.isWhitespace` omits. -/
 theorem isWhiteSpace_of_isWhitespace {c : Char} : c.isWhitespace → isWhiteSpace c := by

@@ -40,6 +40,14 @@ theorem getGC_mem (c : Char) : getGC c ∈ [GC.Lu, GC.Ll, GC.Lt, GC.Lm, GC.Lo, G
 
 namespace GeneralCategory
 
+theorem isCasedLetter_iff {c : Char} :
+    isCasedLetter c ↔ isUppercaseLetter c ∨ isLowercaseLetter c ∨ isTitlecaseLetter c := by
+  simp only [isCasedLetter, isUppercaseLetter, isLowercaseLetter, isTitlecaseLetter,
+    decide_eq_true_eq]
+  show getGC c ⊆ GC.LC ↔ getGC c ⊆ GC.Lu ∨ getGC c ⊆ GC.Ll ∨ getGC c ⊆ GC.Lt
+  generalize getGC c = g, getGC_mem c = h
+  revert g; decide
+
 /-- No character is a surrogate. -/
 @[simp] theorem isSurrogate_eq_false (c : Char) : isSurrogate c = false := by
   revert c; native_decide

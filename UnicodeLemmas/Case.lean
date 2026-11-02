@@ -6,6 +6,7 @@ module
 
 public import UnicodeBasic
 public import UnicodeLemmas.Char
+public import UnicodeLemmas.GeneralCategory
 meta import UnicodeBasic
 meta import UnicodeLemmas.Char
 
@@ -14,11 +15,18 @@ public section
 namespace Unicode
 open GeneralCategory
 
-theorem isCased_of_isUppercase {c : Char} : isUppercase c → isCased c := by
+theorem isCased_iff {c : Char} :
+    isCased c ↔ isUppercase c ∨ isLowercase c ∨ isTitlecaseLetter c := by
   revert c; native_decide
 
-theorem isCased_of_isLowercase {c : Char} : isLowercase c → isCased c := by
-  revert c; native_decide
+theorem isCased_of_isUppercase {c : Char} (h : isUppercase c) : isCased c :=
+  isCased_iff.2 (.inl h)
+
+theorem isCased_of_isLowercase {c : Char} (h : isLowercase c) : isCased c :=
+  isCased_iff.2 (.inr (.inl h))
+
+theorem isCased_of_isTitlecaseLetter {c : Char} (h : isTitlecaseLetter c) : isCased c :=
+  isCased_iff.2 (.inr (.inr h))
 
 theorem isUppercase_of_isUppercaseLetter {c : Char} : isUppercaseLetter c → isUppercase c := by
   revert c; native_decide
@@ -26,12 +34,11 @@ theorem isUppercase_of_isUppercaseLetter {c : Char} : isUppercaseLetter c → is
 theorem isLowercase_of_isLowercaseLetter {c : Char} : isLowercaseLetter c → isLowercase c := by
   revert c; native_decide
 
-theorem isCased_of_isCasedLetter {c : Char} : isCasedLetter c → isCased c := by
-  revert c; native_decide
-
-theorem isCased_iff {c : Char} :
-    isCased c ↔ isUppercase c ∨ isLowercase c ∨ isTitlecaseLetter c := by
-  revert c; native_decide
+theorem isCased_of_isCasedLetter {c : Char} (h : isCasedLetter c) : isCased c := by
+  match isCasedLetter_iff.1 h with
+  | .inl h => exact isCased_of_isUppercase (isUppercase_of_isUppercaseLetter h)
+  | .inr (.inl h) => exact isCased_of_isLowercase (isLowercase_of_isLowercaseLetter h)
+  | .inr (.inr h) => exact isCased_of_isTitlecaseLetter h
 
 theorem not_isLowercase_of_isUppercase {c : Char} : isUppercase c → ¬ isLowercase c := by
   revert c; native_decide
@@ -51,16 +58,22 @@ theorem not_isUppercase_of_isLowercase {c : Char} : isLowercase c → ¬ isUpper
     getCaseFoldingChar (getCaseFoldingChar c) = getCaseFoldingChar c := by
   revert c; native_decide
 
-theorem getLowerChar_of_not_isCased {c : Char} : ¬ isCased c → getLowerChar c = c := by
-  revert c; native_decide
+/-- Simple case mappings leave characters that are not cased unchanged. -/
+theorem simpleCaseMappings_of_not_isCased {c : Char} (h : ¬ isCased c) :
+    getLowerChar c = c ∧ getUpperChar c = c ∧ getTitleChar c = c ∧ getCaseFoldingChar c = c := by
+  revert c h; native_decide
 
-theorem getUpperChar_of_not_isCased {c : Char} : ¬ isCased c → getUpperChar c = c := by
-  revert c; native_decide
+theorem getLowerChar_of_not_isCased {c : Char} (h : ¬ isCased c) : getLowerChar c = c :=
+  (simpleCaseMappings_of_not_isCased h).1
 
-theorem getTitleChar_of_not_isCased {c : Char} : ¬ isCased c → getTitleChar c = c := by
-  revert c; native_decide
+theorem getUpperChar_of_not_isCased {c : Char} (h : ¬ isCased c) : getUpperChar c = c :=
+  (simpleCaseMappings_of_not_isCased h).2.1
 
-theorem getCaseFoldingChar_of_not_isCased {c : Char} : ¬ isCased c → getCaseFoldingChar c = c := by
-  revert c; native_decide
+theorem getTitleChar_of_not_isCased {c : Char} (h : ¬ isCased c) : getTitleChar c = c :=
+  (simpleCaseMappings_of_not_isCased h).2.2.1
+
+theorem getCaseFoldingChar_of_not_isCased {c : Char} (h : ¬ isCased c) :
+    getCaseFoldingChar c = c :=
+  (simpleCaseMappings_of_not_isCased h).2.2.2
 
 end Unicode
