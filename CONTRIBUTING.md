@@ -18,7 +18,7 @@ CI runs the same commands on every pull request, and they must pass with no warn
 
 ## Dependencies
 
-UnicodeLemmas depends on UnicodeBasic and Batteries. Please ask in an issue before adding another dependency.
+UnicodeLemmas depends only on UnicodeBasic. Please ask in an issue before adding another dependency.
 
 ## Code style
 
