@@ -29,7 +29,10 @@ theorem isNumeric_of_isNumber {c : Char} : isNumber c → isNumeric c := by
   revert c; native_decide
 
 theorem isNumeric_of_isDigit {c : Char} : isDigit c → isNumeric c := by
-  revert c; native_decide
+  simp only [Unicode.isDigit, Unicode.isNumeric]
+  split
+  · exact id
+  · split <;> simp_all
 
 @[simp] theorem isSome_getDigit? (c : Char) : (getDigit? c).isSome = isDigit c := by
   revert c; native_decide
