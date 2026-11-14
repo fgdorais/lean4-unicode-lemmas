@@ -76,4 +76,8 @@ theorem getCaseFoldingChar_of_not_isCased {c : Char} (h : ¬ isCased c) :
     getCaseFoldingChar c = c :=
   (simpleCaseMappings_of_not_isCased h).2.2.2
 
+/-- Full case folding of a character is at most three characters long. -/
+theorem length_getCaseFolding_le (c : Char) : (getCaseFolding c).length ≤ 3 := by
+  revert c; native_decide
+
 end Unicode
