@@ -25,6 +25,9 @@ theorem isDigit_of_isDecimal {c : Char} : isDecimal c → isDigit c := by
 theorem isNumber_of_isDecimal {c : Char} (h : isDecimal c) : isNumber c :=
   isNumber_of_isDecimalNumber (isDecimal_eq_isDecimalNumber c ▸ h)
 
+theorem isNumber_of_isDigit {c : Char} : isDigit c → isNumber c := by
+  revert c; native_decide
+
 theorem isNumeric_of_isNumber {c : Char} : isNumber c → isNumeric c := by
   revert c; native_decide
 
