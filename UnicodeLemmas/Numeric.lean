@@ -47,4 +47,27 @@ theorem isNumeric_of_isDigit {c : Char} : isDigit c → isNumeric c := by
     (getDecimalRange? c).isSome = isDecimal c := by
   revert c; native_decide
 
+private theorem getDecimalRange?_all (c : Char) : (getDecimalRange? c).all (fun (a, b) =>
+    b.toNat == a.toNat + 9 && a ≤ c && c ≤ b && (getDigit? c).map Fin.val == some (c.toNat - a.toNat)
+      && (List.range 10).all fun k => getDecimalRange? (Char.ofNat (a.toNat + k)) == some (a, b)) := by
+  revert c; native_decide
+
+/-- Decimal digits come in contiguous ranges of ten characters with values `0` to `9`. -/
+theorem getDecimalRange?_eq_some {c a b : Char} (h : getDecimalRange? c = some (a, b)) :
+    b.toNat = a.toNat + 9 ∧ a ≤ c ∧ c ≤ b ∧ (getDigit? c).map Fin.val = some (c.toNat - a.toNat) ∧
+      ∀ k < 10, getDecimalRange? (Char.ofNat (a.toNat + k)) = some (a, b) := by
+  have := getDecimalRange?_all c
+  simp only [h, Option.all_some, Bool.and_eq_true, beq_iff_eq, decide_eq_true_eq, List.all_eq_true,
+    List.mem_range] at this
+  exact ⟨this.1.1.1.1, this.1.1.1.2, this.1.1.2, this.1.2, this.2⟩
+
+theorem toNat_snd_of_getDecimalRange?_eq_some {c a b : Char} (h : getDecimalRange? c = some (a, b)) :
+    b.toNat = a.toNat + 9 := (getDecimalRange?_eq_some h).1
+
+theorem le_of_getDecimalRange?_eq_some {c a b : Char} (h : getDecimalRange? c = some (a, b)) :
+    a ≤ c ∧ c ≤ b := ⟨(getDecimalRange?_eq_some h).2.1, (getDecimalRange?_eq_some h).2.2.1⟩
+
+theorem getDigit?_of_getDecimalRange?_eq_some {c a b : Char} (h : getDecimalRange? c = some (a, b)) :
+    (getDigit? c).map Fin.val = some (c.toNat - a.toNat) := (getDecimalRange?_eq_some h).2.2.2.1
+
 end Unicode

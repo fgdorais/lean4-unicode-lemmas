@@ -32,6 +32,17 @@ theorem getGC_mem (c : Char) : getGC c ∈ [GC.Lu, GC.Ll, GC.Lt, GC.Lm, GC.Lo, G
     GC.So, GC.Zs, GC.Zl, GC.Zp, GC.Cc, GC.Cf, GC.Cs, GC.Co, GC.Cn] := by
   revert c; native_decide
 
+/-- Abbreviations of the 30 basic categories round trip. -/
+theorem GC.ofAbbrev?_toAbbrev! {x : GC} (h : x ∈ [GC.Lu, GC.Ll, GC.Lt, GC.Lm, GC.Lo, GC.Mn, GC.Mc, GC.Me, GC.Nd, GC.Nl, GC.No, GC.Pc,
+    GC.Pd, GC.Ps, GC.Pe, GC.Pi, GC.Pf, GC.Po, GC.Sm, GC.Sc, GC.Sk, GC.So, GC.Zs, GC.Zl, GC.Zp, GC.Cc,
+    GC.Cf, GC.Cs, GC.Co, GC.Cn]) :
+    GC.ofAbbrev? x.toAbbrev!.toSlice = some x := by
+  revert x; native_decide
+
+@[simp] theorem GC.ofAbbrev?_toAbbrev!_getGC (c : Char) :
+    GC.ofAbbrev? (getGC c).toAbbrev!.toSlice = some (getGC c) :=
+  GC.ofAbbrev?_toAbbrev! (getGC_mem c)
+
 namespace GeneralCategory
 
 theorem isCasedLetter_iff {c : Char} :
@@ -103,6 +114,22 @@ theorem isOther_of_isFormat {c : Char} : isFormat c → isOther c := by gc_subse
 theorem isOther_of_isSurrogate {c : Char} : isSurrogate c → isOther c := by gc_subset
 theorem isOther_of_isPrivateUse {c : Char} : isPrivateUse c → isOther c := by gc_subset
 theorem isOther_of_isUnassigned {c : Char} : isUnassigned c → isOther c := by gc_subset
+
+/-- Every character is in exactly one of the seven major categories. -/
+theorem count_majorCategories (c : Char) : [isLetter c, isMark c, isNumber c, isPunctuation c,
+    isSymbol c, isSeparator c, isOther c].count true = 1 := by
+  show [decide (getGC c ⊆ GC.L), decide (getGC c ⊆ GC.M), decide (getGC c ⊆ GC.N),
+    decide (getGC c ⊆ GC.P), decide (getGC c ⊆ GC.S), decide (getGC c ⊆ GC.Z),
+    decide (getGC c ⊆ GC.C)].count true = 1
+  generalize getGC c = g, getGC_mem c = h
+  revert g; decide
+
+theorem isControl_iff {c : Char} : isControl c ↔ c.val < 0x20 ∨ 0x7F ≤ c.val ∧ c.val ≤ 0x9F := by
+  revert c; native_decide
+
+theorem isPrivateUse_iff {c : Char} : isPrivateUse c ↔ 0xE000 ≤ c.val ∧ c.val ≤ 0xF8FF ∨
+    0xF0000 ≤ c.val ∧ c.val ≤ 0xFFFFD ∨ 0x100000 ≤ c.val ∧ c.val ≤ 0x10FFFD := by
+  revert c; native_decide
 
 end GeneralCategory
 
