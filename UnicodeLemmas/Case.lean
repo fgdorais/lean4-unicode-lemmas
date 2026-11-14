@@ -40,40 +40,4 @@ theorem isCased_of_isCasedLetter {c : Char} (h : isCasedLetter c) : isCased c :=
   | .inr (.inl h) => exact isCased_of_isLowercase (isLowercase_of_isLowercaseLetter h)
   | .inr (.inr h) => exact isCased_of_isTitlecaseLetter h
 
-theorem not_isLowercase_of_isUppercase {c : Char} : isUppercase c → ¬ isLowercase c := by
-  revert c; native_decide
-
-theorem not_isUppercase_of_isLowercase {c : Char} : isLowercase c → ¬ isUppercase c :=
-  fun hl hu => not_isLowercase_of_isUppercase hu hl
-
-@[simp] theorem getLowerChar_getLowerChar (c : Char) :
-    getLowerChar (getLowerChar c) = getLowerChar c := by
-  revert c; native_decide
-
-@[simp] theorem getUpperChar_getUpperChar (c : Char) :
-    getUpperChar (getUpperChar c) = getUpperChar c := by
-  revert c; native_decide
-
-@[simp] theorem getCaseFoldingChar_getCaseFoldingChar (c : Char) :
-    getCaseFoldingChar (getCaseFoldingChar c) = getCaseFoldingChar c := by
-  revert c; native_decide
-
-/-- Simple case mappings leave characters that are not cased unchanged. -/
-theorem simpleCaseMappings_of_not_isCased {c : Char} (h : ¬ isCased c) :
-    getLowerChar c = c ∧ getUpperChar c = c ∧ getTitleChar c = c ∧ getCaseFoldingChar c = c := by
-  revert c h; native_decide
-
-theorem getLowerChar_of_not_isCased {c : Char} (h : ¬ isCased c) : getLowerChar c = c :=
-  (simpleCaseMappings_of_not_isCased h).1
-
-theorem getUpperChar_of_not_isCased {c : Char} (h : ¬ isCased c) : getUpperChar c = c :=
-  (simpleCaseMappings_of_not_isCased h).2.1
-
-theorem getTitleChar_of_not_isCased {c : Char} (h : ¬ isCased c) : getTitleChar c = c :=
-  (simpleCaseMappings_of_not_isCased h).2.2.1
-
-theorem getCaseFoldingChar_of_not_isCased {c : Char} (h : ¬ isCased c) :
-    getCaseFoldingChar c = c :=
-  (simpleCaseMappings_of_not_isCased h).2.2.2
-
 end Unicode
