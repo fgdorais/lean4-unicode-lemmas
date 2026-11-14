@@ -6,6 +6,7 @@ module
 
 public import UnicodeBasic
 public import Batteries.Data.Char.Basic
+public import UnicodeLemmas.Case
 meta import UnicodeBasic
 meta import Batteries.Data.Char.Basic
 
@@ -35,6 +36,21 @@ theorem isSeparator_or_isControl_of_isWhiteSpace {c : Char} :
 
 theorem isUnassigned_of_isNoncharacterCodePoint {c : Char} :
     isNoncharacterCodePoint c → isUnassigned c := by
+  revert c; native_decide
+
+theorem isAlphabetic_of_isLowercase {c : Char} (h : isLowercase c) : isAlphabetic c :=
+  isAlphabetic_of_isCased (isCased_of_isLowercase h)
+
+theorem isAlphabetic_of_isUppercase {c : Char} (h : isUppercase c) : isAlphabetic c :=
+  isAlphabetic_of_isCased (isCased_of_isUppercase h)
+
+theorem isNoncharacterCodePoint_iff {c : Char} : isNoncharacterCodePoint c ↔
+    c.val &&& 0xFFFE = 0xFFFE ∨ 0xFDD0 ≤ c.val ∧ c.val ≤ 0xFDEF := by
+  revert c; native_decide
+
+/-- The script of a character, unless it is `Zyyy` or `Zinh`, is among its script extensions. -/
+theorem contains_getScriptSet_getScript {c : Char} (h₁ : (getScript c).toAbbrev ≠ "Zyyy")
+    (h₂ : (getScript c).toAbbrev ≠ "Zinh") : (getScriptSet c).contains (getScript c) := by
   revert c; native_decide
 
 end Unicode
