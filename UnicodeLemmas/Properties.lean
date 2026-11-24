@@ -46,7 +46,10 @@ theorem isAlphabetic_of_isUppercase {c : Char} (h : isUppercase c) : isAlphabeti
 
 theorem isNoncharacterCodePoint_iff {c : Char} : isNoncharacterCodePoint c ↔
     c.val &&& 0xFFFE = 0xFFFE ∨ 0xFDD0 ≤ c.val ∧ c.val ≤ 0xFDEF := by
-  revert c; native_decide
+  have := c.valid
+  simp only [isNoncharacterCodePoint, lookupNoncharacterCodePoint, Bool.or_eq_true,
+    Bool.and_eq_true, decide_eq_true_eq, beq_iff_eq]
+  grind
 
 /-- The script of a character, unless it is `Zyyy` or `Zinh`, is among its script extensions. -/
 theorem contains_getScriptSet_getScript {c : Char} (h₁ : (getScript c).toAbbrev ≠ "Zyyy")
