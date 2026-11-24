@@ -9,9 +9,9 @@ name = "UnicodeLemmas"
 [[require]]
 name = "batteries"
 git = "https://github.com/leanprover-community/batteries"
-rev = "nightly-testing"
+rev = "main"
 
 [[require]]
 name = "UnicodeBasic"
 git = "https://github.com/fgdorais/lean4-unicode-basic"
-rev = "nightly-testing"
+rev = "main"
