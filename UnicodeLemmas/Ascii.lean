@@ -32,10 +32,10 @@ theorem isDigit_eq_isDigit {c : Char} (h : c.val < 0x80) : isDigit c = c.isDigit
   of_forall_lt_0x80 (p := fun c => isDigit c = c.isDigit) (by decide) h
 
 theorem getLowerChar_eq_toLower {c : Char} (h : c.val < 0x80) : getLowerChar c = c.toLower :=
-  of_forall_lt_0x80 (p := fun c => getLowerChar c = c.toLower) (by decide) h
+  of_forall_lt_0x80 (p := fun c => getLowerChar c = c.toLower) (by decide +kernel) h
 
 theorem getUpperChar_eq_toUpper {c : Char} (h : c.val < 0x80) : getUpperChar c = c.toUpper :=
-  of_forall_lt_0x80 (p := fun c => getUpperChar c = c.toUpper) (by decide) h
+  of_forall_lt_0x80 (p := fun c => getUpperChar c = c.toUpper) (by decide +kernel) h
 
 theorem isUppercase_of_isUpper {c : Char} (h : c.isUpper) : isUppercase c := by
   have hc : c.val < 0x80 := by simp [Char.isUpper] at h; grind
