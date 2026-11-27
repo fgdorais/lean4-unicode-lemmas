@@ -15,3 +15,8 @@ rev = "main"
 name = "UnicodeBasic"
 git = "https://github.com/fgdorais/lean4-unicode-basic"
 rev = "main"
+
+[[require]]
+name = "UnicodeExtra"
+git = "https://github.com/fgdorais/lean4-unicode-extra"
+rev = "claude/project-thread-meto62"
