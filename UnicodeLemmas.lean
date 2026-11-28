@@ -10,3 +10,4 @@ public import UnicodeLemmas.Numeric
 public import UnicodeLemmas.Properties
 public import UnicodeLemmas.Decomposition
 public import UnicodeLemmas.Ascii
+public import UnicodeLemmas.Normalization

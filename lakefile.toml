@@ -15,3 +15,8 @@ rev = "nightly-testing"
 name = "UnicodeBasic"
 git = "https://github.com/fgdorais/lean4-unicode-basic"
 rev = "nightly-testing"
+
+[[require]]
+name = "UnicodeExtra"
+git = "https://github.com/fgdorais/lean4-unicode-extra"
+rev = "main"
